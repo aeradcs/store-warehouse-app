@@ -1,0 +1,9 @@
+store/migrations
+warehouse/migrations
+.idea
+venv
+db.sqlite3
+db.store
+db.warehouse
+**/__pycache__/
+__pycache__/
