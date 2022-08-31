@@ -8,33 +8,16 @@ from rest_framework.viewsets import GenericViewSet
 from .models import Warehouse
 from .serializers import WarehouseSerializer
 from rest_framework import mixins
-from django.db.models import Q
 
 
 class WarehouseViewSet(viewsets.ViewSet,
                        mixins.ListModelMixin,
                        mixins.RetrieveModelMixin,
                        mixins.DestroyModelMixin,
+                       mixins.CreateModelMixin,
                        GenericViewSet):
     queryset = Warehouse.objects.all()
     serializer_class = WarehouseSerializer
-
-    def create(self, request):
-        data = request.data
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        # url = "http://localhost:8001/warehouses/"
-        # body = {"order_name": data["order_name"], "status": data["status"], "store": "default"}
-        #
-        # response = requests.post(url=url, json=body)
-        # status_code = response.status_code
-        # if not status_code == status.HTTP_201_CREATED:
-        #     raise Exception("Something went wrong while Store-Warehouse synchronization.",
-        #                     status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(methods=['patch'], detail=True)
     def patch(self, request):
@@ -43,11 +26,8 @@ class WarehouseViewSet(viewsets.ViewSet,
         data = request.data
         old = data['old']
         new = data['new']
-        print(old)
-        print(new)
 
         instance = Warehouse.objects.get(order_name=old['order_name'], warehouse=old['warehouse'], store=old['store'])
-        print(instance)
         serializer = self.get_serializer(data=new)
         serializer.is_valid(raise_exception=True)
         serializer.update(instance, new)
@@ -82,22 +62,3 @@ class WarehouseViewSet(viewsets.ViewSet,
             print(e)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-    # def update(self, request, pk=None):
-    #     data = request.data
-    #     instance = Warehouse.objects.get(pk=pk)
-    #     serializer = self.get_serializer(data=data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.update(instance, data)
-    #
-    #
-    #     # url = f"http://localhost:8000/stores/{str(pk)}/"
-    #     # body = {"order_name": data["order_name"], "status": data["status"], "store": "1"}
-    #     #
-    #     # response = requests.put(url=url, json=body)
-    #     # status_code = response.status_code
-    #     # if not status_code == status.HTTP_200_OK:
-    #     #     raise Exception("Something went wrong while Store-Warehouse synchronization.",
-    #     #                     status.HTTP_500_INTERNAL_SERVER_ERROR)
-    #
-    #     return Response(serializer.data, status=status.HTTP_200_OK)

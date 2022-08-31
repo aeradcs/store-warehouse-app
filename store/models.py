@@ -13,3 +13,6 @@ class Order(models.Model):
 
     def __str__(self):
         return f"{self.order_name} {self.status} {self.warehouse} {self.store}"
+
+    def to_dict(self):
+        return {"order_name": self.order_name, "status": self.status, "warehouse": self.warehouse, "store": self.store}
