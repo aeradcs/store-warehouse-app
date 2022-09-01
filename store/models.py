@@ -1,6 +1,4 @@
-from django import forms
 from django.db import models
-
 from storeWarehouse.utils.order_statuses import STATUS_CHOICES
 
 
