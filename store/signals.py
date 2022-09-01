@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from rest_framework import status
 from .serializers import *
 from store.models import Order
+from storeWarehouse.utils.equality import equal
 
 @receiver(post_save, sender=Order)
 def post_save_listener(**kwargs):
@@ -29,11 +30,17 @@ def post_save_listener(**kwargs):
         for row in jsn:
             if row['object_id'] == data['object_id']:
                 id = row['id']
+                del row['id']
+                print("row", row)
+                print("data", data)
+                print("order in db", Order.objects.get(object_id=row['object_id']).to_dict())
 
-                url = f"http://localhost:8001/warehouses/{id}/"
-                response = requests.put(url=url, json=data)
-                status_code = response.status_code
-                if not status_code == status.HTTP_200_OK:
-                    raise Exception("Something went wrong while Store-Warehouse synchronization.",
-                                    status.HTTP_500_INTERNAL_SERVER_ERROR)
+                if not equal(row, data):
+                    print("not equal")
+                    url = f"http://localhost:8001/warehouses/{id}/"
+                    response = requests.put(url=url, json=data)
+                    status_code = response.status_code
+                    if not status_code == status.HTTP_200_OK:
+                        raise Exception("Something went wrong while Store-Warehouse synchronization.",
+                                        status.HTTP_500_INTERNAL_SERVER_ERROR)
 
