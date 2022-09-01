@@ -38,6 +38,8 @@ When change is made in one database, e.g. new order is created in the store or o
 
 Open [http://127.0.0.1:8000/stores/](http://127.0.0.1:8000/stores/) and [http://127.0.0.1:8001/warehouses/](http://127.0.0.1:8001/warehouses/) in a browser and you'll see Django forms for communicating with apps. 
 
+**After every change reload browser page.**
+
 You can:
 - get lists of orders in store and warehouse
 
