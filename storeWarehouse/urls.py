@@ -9,7 +9,7 @@ router.register(r'stores', OrderViewSet)
 router.register(r'warehouses', WarehouseViewSet)
 
 urlpatterns = [
-    path('admin', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', include(router.urls)),
 
 ]
