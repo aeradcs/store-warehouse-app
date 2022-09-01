@@ -22,5 +22,5 @@ class Order(models.Model):
         return f"{self.object_id} {self.order_name} {self.status} {self.warehouse} {self.store}"
 
     def to_dict(self):
-        return {"object_id": self.object_id, "order_name": self.order_name, "status": self.status, "warehouse": self.warehouse, "store": self.store}
-
+        return {"object_id": self.object_id, "order_name": self.order_name, "status": self.status,
+                "warehouse": self.warehouse, "store": self.store}
